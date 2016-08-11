@@ -1,45 +1,12 @@
 //
-//  ViewController.swift
+//  VideoCell.swift
 //  YouTube
 //
-//  Created by Ricardo Rodriguez Haro on 8/9/16.
+//  Created by Ricardo Rodriguez Haro on 8/11/16.
 //  Copyright © 2016 Ricardo Rodriguez Haro. All rights reserved.
 //
 
 import UIKit
-
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        navigationItem.title = "Home"
-        
-        collectionView?.backgroundColor = UIColor.whiteColor()
-        
-        collectionView?.registerClass(VideoCell.self, forCellWithReuseIdentifier: "cellId")
-        
-    }
-    
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellId", forIndexPath: indexPath)
-        
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(view.frame.width, 200)
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
-    }
-
-}
 
 class VideoCell: UICollectionViewCell {
     
@@ -51,7 +18,6 @@ class VideoCell: UICollectionViewCell {
     let thumbnailImageView: UIImageView = {
         
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.blueColor()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "inna_heaven")
         imageView.contentMode = .ScaleAspectFill
@@ -63,7 +29,7 @@ class VideoCell: UICollectionViewCell {
     let separatorView: UIView = {
         
         let view = UIView()
-        view.backgroundColor = UIColor.blackColor()
+        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -72,17 +38,18 @@ class VideoCell: UICollectionViewCell {
     let userProfileImageView: UIImageView = {
         
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.greenColor()
         imageView.image = UIImage(named: "inna_profile")
+        imageView.layer.cornerRadius = 22
+        imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageView
     }()
     
     let titleLabel: UILabel = {
-    
+        
         let label = UILabel()
-        label.backgroundColor = UIColor.purpleColor()
+        label.text = "Inna - Heaven"
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -91,7 +58,9 @@ class VideoCell: UICollectionViewCell {
     let subtitleTextView: UITextView = {
         
         let textView = UITextView()
-        textView.backgroundColor = UIColor.redColor()
+        textView.text = "INNA · 17.305.163 views · 2 months ago"
+        textView.textContainerInset = UIEdgeInsetsMake(0, -4, 0, 0)
+        textView.textColor = UIColor.lightGrayColor()
         textView.translatesAutoresizingMaskIntoConstraints = false
         
         return textView
@@ -104,14 +73,14 @@ class VideoCell: UICollectionViewCell {
         addSubview(userProfileImageView)
         addSubview(titleLabel)
         addSubview(subtitleTextView)
-    
+        
         addConstraintsWithFormat("H:|-16-[v0]-16-|", views: thumbnailImageView)
         
         addConstraintsWithFormat("H:|-16-[v0(44)]", views: userProfileImageView)
         
         //vertical constraints
         addConstraintsWithFormat("V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|", views: thumbnailImageView, userProfileImageView, separatorView)
-       
+        
         addConstraintsWithFormat("H:|[v0]|", views: separatorView)
         
         //top constraint
@@ -124,13 +93,13 @@ class VideoCell: UICollectionViewCell {
         addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 0, constant: 20))
         
         //top constraint
-        addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .Top, relatedBy: .Equal, toItem: titleLabel, attribute: .Bottom, multiplier: 1, constant: 8))
+        addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .Top, relatedBy: .Equal, toItem: titleLabel, attribute: .Bottom, multiplier: 1, constant: 4))
         //left constraint
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .Left, relatedBy: .Equal, toItem: userProfileImageView, attribute: .Right, multiplier: 1, constant: 8))
         //right constraint
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .Right, relatedBy: .Equal, toItem: thumbnailImageView, attribute: .Right, multiplier: 1, constant: 0))
         //height constraint
-        addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 0, constant: 20))
+        addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 0, constant: 30))
         
     }
     
@@ -138,17 +107,3 @@ class VideoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-extension UIView {
-    
-    func addConstraintsWithFormat(format: String, views: UIView...) {
-        var viewsDictionary = [String: UIView]()
-        for (index, view) in views.enumerate() {
-            let key = "v\(index)"
-            viewsDictionary[key] = view
-        }
-        
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
-    }
-}
-
